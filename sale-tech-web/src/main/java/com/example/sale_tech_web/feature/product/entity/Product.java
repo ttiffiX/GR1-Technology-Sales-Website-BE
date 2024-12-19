@@ -23,6 +23,7 @@ public class Product {
     private String name;
     private int price;
     private String category;
+    private String image;
 
     @JsonIgnore // Không gửi quantity khi trả về JSON
     private int quantity;

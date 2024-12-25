@@ -49,7 +49,7 @@ CREATE TABLE OrderDetail
 CREATE TABLE Cart
 (
     cart_id     SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
+    customer_id INT NOT NULL,	--đang không có -> null
     product_id  INT NOT NULL,
     quantity    INT NOT NULL,
     time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -1,5 +1,6 @@
 package com.example.sale_tech_web.feature.product.manager;
 
+import com.example.sale_tech_web.controller.exception.ServerException;
 import com.example.sale_tech_web.feature.product.entity.Product;
 import com.example.sale_tech_web.feature.product.repository.ProductRepository;
 
@@ -18,6 +19,6 @@ public class ProductService {
     }
 
     public Product getProductById(Long productId) {
-        return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
+        return productRepository.findById(productId).orElseThrow(() -> new ServerException("Product not found"));
     }
 }

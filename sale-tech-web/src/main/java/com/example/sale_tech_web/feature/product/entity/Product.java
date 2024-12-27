@@ -20,12 +20,17 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long product_id;
 
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "price", nullable = false)
     private int price;
+    @Column(name = "category", nullable = false)
     private String category;
+    @Column(name = "image")
     private String image;
 
     @JsonIgnore // Không gửi quantity khi trả về JSON
+    @Column(name = "quantity", nullable = false)
     private int quantity;
 
     @Transient // Không lưu thuộc tính này vào cơ sở dữ liệu

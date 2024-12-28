@@ -107,4 +107,15 @@ public class CartService {
         return "Item quantity updated successfully!";
     }
 
+    public String removeFromCart(Long productId) {
+        Cart existingCartItem = cartRepository.findByProductId(productId);
+
+        if (existingCartItem == null) {
+            throw new ClientException("Product not found in cart.");
+        }
+
+        cartRepository.delete(existingCartItem);
+        return "Item removed from cart.";
+    }
+
 }

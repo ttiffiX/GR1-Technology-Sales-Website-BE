@@ -38,7 +38,7 @@ public class CartController {
     public ResponseEntity<String> incrementQuantity(@RequestBody Map<String, Object> payload) {
         Long productId = Long.valueOf((Integer) payload.get("productId"));
         int quantity = (int) payload.get("quantity");
-        log.info("Incrementing product quantity for productId(Id{}) by {}", productId, quantity);
+        log.info("Incrementing product quantity for product (id {}) by {}", productId, quantity);
 
         String result = cartService.incQuantity(productId, quantity);
         return ResponseEntity.ok(result);
@@ -48,9 +48,18 @@ public class CartController {
     public ResponseEntity<String> decrementQuantity(@RequestBody Map<String, Object> payload) {
         Long productId = Long.valueOf((Integer) payload.get("productId"));
         int quantity = (int) payload.get("quantity");
-        log.info("Decrementing product quantity for productId(Id{}) by {}", productId, quantity);
+        log.info("Decrementing product quantity for product (id {}) by {}", productId, quantity);
 
         String result = cartService.decQuantity(productId, quantity);
+        return ResponseEntity.ok(result);
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeFromCart(@RequestBody Map<String, Object> payload) {
+        Long productId = Long.valueOf((Integer) payload.get("productId"));
+        log.info("Removing cart product (id {}) from cart", productId);
+
+        String result = cartService.removeFromCart(productId);
         return ResponseEntity.ok(result);
     }
 

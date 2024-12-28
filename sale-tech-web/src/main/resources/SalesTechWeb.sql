@@ -45,14 +45,14 @@ CREATE TABLE OrderDetail
     FOREIGN KEY (product_id) REFERENCES Product (product_id) ON DELETE CASCADE
 );
 
---CART(cart_id, customer_id,product_id,quantity,time)
+--CART(cart_id, customer_id,product_id,quantity,update_at)
 CREATE TABLE Cart
 (
     cart_id     SERIAL PRIMARY KEY,
     customer_id INT NOT NULL,	--đang không có -> null
     product_id  INT NOT NULL,
     quantity    INT NOT NULL,
-    time        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES Customer (customer_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Product (product_id) ON DELETE CASCADE
 );

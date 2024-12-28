@@ -9,6 +9,7 @@ import com.example.sale_tech_web.feature.product.entity.Product;
 import com.example.sale_tech_web.feature.product.manager.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +23,11 @@ public class CartService {
     private final ProductService productService;
 
     public CartResponse getCartItems() {
-        List<Cart> cartItems = cartRepository.findAll();
+        List<Cart> cartItems = cartRepository.findAll(Sort.by(Sort.Order.desc("updateAt")));
 
         int totalQuantity = cartItems.stream()
-                                     .mapToInt(Cart::getQuantity)
-                                        .sum();
+                .mapToInt(Cart::getQuantity)
+                .sum();
 
         List<CartDTO> cartDTOS = cartItems.stream().map(cart -> {
             // Tìm product theo productId
@@ -60,12 +61,50 @@ public class CartService {
                 throw new ClientException("Not enough stock available.");
             }
         } else {
-            Cart cart = Cart.builder()
-                    .productId(productId)
-                    .quantity(quantity)
-                    .build();
-            cartRepository.save(cart);
-            return "Item added successfully!";
+            if (quantity <= product.getQuantity()) {
+                Cart cart = Cart.builder()
+                        .productId(productId)
+                        .quantity(quantity)
+                        .build();
+                cartRepository.save(cart);
+                return "Item added successfully!";
+            } else throw new ClientException("Not enough stock available.");
         }
     }
+
+    public String incQuantity(Long productId, int quantity) {
+        Product product = productService.getProductById(productId);
+        Cart existingCartItem = cartRepository.findByProductId(productId);
+        if (existingCartItem == null) {
+            throw new ClientException("Product not found in cart.");
+        }
+
+        if (existingCartItem.getQuantity() + quantity > product.getQuantity()) {
+            throw new ClientException("Not enough stock available.");
+        }
+
+        existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
+        cartRepository.save(existingCartItem);
+        return "Item quantity updated successfully!";
+    }
+
+    public String decQuantity(Long productId, int quantity) {
+        Cart existingCartItem = cartRepository.findByProductId(productId);
+
+        if (existingCartItem == null) {
+            throw new ClientException("Product not found in cart.");
+        }
+        // Giảm số lượng sản phẩm
+        int updatedQuantity = existingCartItem.getQuantity() - quantity;
+        if (updatedQuantity <= 0) {
+            // Xoá sản phẩm nếu số lượng <= 0
+            cartRepository.delete(existingCartItem);
+            return "Item removed from cart.";
+        }
+
+        existingCartItem.setQuantity(updatedQuantity);
+        cartRepository.save(existingCartItem);
+        return "Item quantity updated successfully!";
+    }
+
 }

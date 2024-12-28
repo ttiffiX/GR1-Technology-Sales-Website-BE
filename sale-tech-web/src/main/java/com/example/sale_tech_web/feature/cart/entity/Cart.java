@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,4 +29,13 @@ public class Cart {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Column(name = "update_at")
+    private LocalDateTime updateAt;
+
+    @PrePersist
+    @PreUpdate
+    public void updateTimestamp() {
+        this.updateAt = LocalDateTime.now();  // Set thời gian mỗi khi insert hoặc update
+    }
 }

@@ -56,7 +56,7 @@ public class CartService {
             if (existingCartItem.getQuantity() + quantity <= product.getQuantity()) {
                 existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
                 cartRepository.save(existingCartItem);  // Cập nhật giỏ hàng
-                return "Item quantity updated successfully!";
+                return "Item added successfully!";
             } else {
                 throw new ClientException("Not enough stock available.");
             }
@@ -85,7 +85,7 @@ public class CartService {
 
         existingCartItem.setQuantity(existingCartItem.getQuantity() + quantity);
         cartRepository.save(existingCartItem);
-        return "Item quantity updated successfully!";
+        return "Updated successfully!";
     }
 
     public String decQuantity(Long productId, int quantity) {
@@ -99,12 +99,12 @@ public class CartService {
         if (updatedQuantity <= 0) {
             // Xoá sản phẩm nếu số lượng <= 0
             cartRepository.delete(existingCartItem);
-            return "Item removed from cart.";
+            return "Removed successfully!";
         }
 
         existingCartItem.setQuantity(updatedQuantity);
         cartRepository.save(existingCartItem);
-        return "Item quantity updated successfully!";
+        return "Updated successfully!";
     }
 
     public String removeFromCart(Long productId) {
@@ -115,7 +115,7 @@ public class CartService {
         }
 
         cartRepository.delete(existingCartItem);
-        return "Item removed from cart.";
+        return "Removed successfully!";
     }
 
 }

@@ -65,6 +65,7 @@ public class CartService {
                 Cart cart = Cart.builder()
                         .productId(productId)
                         .quantity(quantity)
+                        .customer_id(1L)
                         .build();
                 cartRepository.save(cart);
                 return "Item added successfully!";
@@ -117,5 +118,12 @@ public class CartService {
         cartRepository.delete(existingCartItem);
         return "Removed successfully!";
     }
+
+    public String removeAllFromCart() {
+        cartRepository.deleteAll();
+        return "Removed all successfully!";
+    }
+
+
 
 }

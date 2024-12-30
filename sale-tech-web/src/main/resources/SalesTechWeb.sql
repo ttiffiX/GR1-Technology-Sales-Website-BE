@@ -11,37 +11,47 @@ CREATE TABLE product
 );
 
 
---Customer (CustomerID, Name, Email, Password)
+--Customer (CustomerID, Name, Email, Password, name, phone, role)
 CREATE TABLE Customer
 (
     customer_id SERIAL PRIMARY KEY,
     username    VARCHAR(100) NOT NULL UNIQUE,
     email       VARCHAR(100) NOT NULL UNIQUE,
     password    VARCHAR(255) NOT NULL,
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	name VARCHAR(255),
+	phone VARCHAR(20),
+	role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Customer')),
 );
 
---Order (OrderID, CustomerID, Date, Status)
-CREATE TABLE "Order"
+INSERT INTO customer (username, email, password, name, role) 
+VALUES 
+	('ttiffX', 'sangpham1224@gmail.com', '123456', 'Sang', 'Customer')
+
+--Order (OrderID, CustomerID, order_date, update_at, total_price, Status, name, phone, address)
+CREATE TABLE orders
 (
     order_id    SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,
+    customer_id INT NOT NULL, 
     order_date  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    update_at   TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
     total_price INT NOT NULL,
-    status      VARCHAR(20) DEFAULT 'Pending',
+    status      VARCHAR(20) DEFAULT 'Pending', --pending, successed, canceled
+    name VARCHAR(255),
+    phone VARCHAR(20) NOT NULL,
+    address TEXT NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer (customer_id) ON DELETE CASCADE
 );
 
 
---OrderDetail (OrderID, ProductID, Quantity)
+--OrderDetail (orderdetail_id,OrderID, ProductID, Quantity, unit_price)
 CREATE TABLE OrderDetail
 (
+	orderdetail_id SERIAL PRIMARY KEY, 
     order_id   INT NOT NULL,
     product_id INT NOT NULL,
     quantity   INT NOT NULL,
     unit_price INT NOT NULL,
-    PRIMARY KEY (order_id, product_id),
-    FOREIGN KEY (order_id) REFERENCES "Order" (order_id) ON DELETE CASCADE,
+    FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Product (product_id) ON DELETE CASCADE
 );
 
@@ -49,7 +59,7 @@ CREATE TABLE OrderDetail
 CREATE TABLE Cart
 (
     cart_id     SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL,	--đang không có -> null
+    customer_id INT NOT NULL,
     product_id  INT NOT NULL,
     quantity    INT NOT NULL,
     update_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

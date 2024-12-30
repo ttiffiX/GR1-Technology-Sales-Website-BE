@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,6 +34,10 @@ public class Product {
     @JsonIgnore // Không gửi quantity khi trả về JSON
     @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @JsonIgnore
+    @Column(name = "create_at")
+    private LocalDateTime createAt;
 
     @Transient // Không lưu thuộc tính này vào cơ sở dữ liệu
     private boolean stocked;

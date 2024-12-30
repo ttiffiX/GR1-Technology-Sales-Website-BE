@@ -21,7 +21,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cart_id;
 
-    @Column(name = "customer_id")
+    @Column(name = "customer_id", nullable = false)
     private Long customer_id;
 
     @Column(name = "product_id", nullable = false)

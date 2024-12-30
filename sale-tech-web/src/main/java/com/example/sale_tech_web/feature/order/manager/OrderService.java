@@ -1,5 +1,6 @@
 package com.example.sale_tech_web.feature.order.manager;
 
+import com.example.sale_tech_web.controller.exception.ClientException;
 import com.example.sale_tech_web.feature.cart.entity.CartResponse;
 import com.example.sale_tech_web.feature.cart.manager.CartService;
 import com.example.sale_tech_web.feature.order.entity.orderdetails.OrderDetailDTO;
@@ -85,24 +86,14 @@ public class OrderService {
         return "Place order successfully!";
     }
 
-//    public OrderResponse OrderSuccess(Long orderId) {
-//        // Kiểm tra xem đơn hàng có tồn tại không
-//        Optional<Order> orderOptional = orderRepository.findById(orderId);
-//        if (orderOptional.isPresent()) {
-//            Order order = orderOptional.get();
-//
-//            // Kiểm tra trạng thái hiện tại của đơn hàng là 'pending'
-//            if ("pending".equals(order.getStatus())) {
-//                // Cập nhật trạng thái đơn hàng thành 'success'
-//                order.setStatus("success");
-//                orderRepository.save(order);
-//            }
-//        } else {
-//            throw new RuntimeException("Order not found");
-//        }
-//
-//        // Trả về danh sách đơn hàng cập nhật
-//        return getAllOrders(); // Trả lại tất cả các đơn hàng để có thể xem các thay đổi
-//    }
+    public String cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ClientException("Order not found."));
+
+        order.setStatus("canceled");
+        orderRepository.save(order);
+
+        return "Canceled successfully!";
+    }
 }
 

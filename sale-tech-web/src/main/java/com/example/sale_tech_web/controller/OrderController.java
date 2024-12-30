@@ -39,5 +39,13 @@ public class OrderController {
         String result = orderService.placeOrder(name, phone, address);
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<String> cancelOrder(@RequestBody Map<String, Object> payload) {
+        Long orderId = Long.parseLong(payload.get("orderId").toString());
+        log.info("Cancel Order Request");
+        String result = orderService.cancelOrder(orderId);
+        return ResponseEntity.ok(result);
+    }
 }
 

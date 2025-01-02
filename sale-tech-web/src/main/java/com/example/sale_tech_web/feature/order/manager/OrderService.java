@@ -9,6 +9,7 @@ import com.example.sale_tech_web.feature.order.entity.orderdetails.OrderDetail;
 import com.example.sale_tech_web.feature.order.entity.OrderResponse;
 import com.example.sale_tech_web.feature.order.repository.OrderDetailRepository;
 import com.example.sale_tech_web.feature.order.repository.OrderRepository;
+import com.example.sale_tech_web.feature.payment.manager.PaymentService;
 import com.example.sale_tech_web.feature.product.entity.Product;
 import com.example.sale_tech_web.feature.product.manager.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class OrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final CartService cartService;
     private final ProductService productService;
+    private final PaymentService paymentService;
 
     public OrderResponse getAllOrders() {
         List<Order> orders = orderRepository.findAll(Sort.by(Sort.Order.desc("updateAt")));
@@ -47,7 +49,7 @@ public class OrderService {
         return new OrderResponse(orders, orderDetailDTOS);
     }
 
-    public String placeOrder(String name, String phone, String address) {
+    public String placeOrder(String name, String phone, String address, String payment_method) {
         CartResponse cartResponse = cartService.getCartItems();
 
         int totalPrice = cartResponse.getCartDTO().stream()
@@ -80,6 +82,8 @@ public class OrderService {
         // Lưu danh sách OrderDetail
         orderDetailRepository.saveAll(orderDetails);
 
+        paymentService.setPayment(savedOrder.getOrder_id(), payment_method);
+
         // Xóa tất cả các sản phẩm trong giỏ hàng
         cartService.removeAllFromCart();
 
@@ -89,10 +93,9 @@ public class OrderService {
     public String cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ClientException("Order not found."));
-
         order.setStatus("canceled");
+        paymentService.cancelPayment(order.getOrder_id());
         orderRepository.save(order);
-
         return "Canceled successfully!";
     }
 }

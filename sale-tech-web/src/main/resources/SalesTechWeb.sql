@@ -18,27 +18,26 @@ CREATE TABLE Customer
     username    VARCHAR(100) NOT NULL UNIQUE,
     email       VARCHAR(100) NOT NULL UNIQUE,
     password    VARCHAR(255) NOT NULL,
-	name VARCHAR(255),
-	phone VARCHAR(20),
-	role VARCHAR(50) NOT NULL CHECK (role IN ('Admin', 'Customer')),
+    name        VARCHAR(255),
+    phone       VARCHAR(20),
+    role        VARCHAR(50)  NOT NULL CHECK (role IN ('Admin', 'Customer')),
 );
 
-INSERT INTO customer (username, email, password, name, role) 
-VALUES 
-	('ttiffX', 'sangpham1224@gmail.com', '123456', 'Sang', 'Customer')
+INSERT INTO customer (username, email, password, name, role)
+VALUES ('ttiffX', 'sangpham1224@gmail.com', '123456', 'Sang', 'Customer')
 
 --Order (OrderID, CustomerID, order_date, update_at, total_price, Status, name, phone, address)
 CREATE TABLE orders
 (
     order_id    SERIAL PRIMARY KEY,
-    customer_id INT NOT NULL, 
+    customer_id INT         NOT NULL,
     order_date  TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
     update_at   TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
-    total_price INT NOT NULL,
+    total_price INT         NOT NULL,
     status      VARCHAR(20) DEFAULT 'Pending', --pending, successed, canceled
-    name VARCHAR(255),
-    phone VARCHAR(20) NOT NULL,
-    address TEXT NOT NULL,
+    name        VARCHAR(255),
+    phone       VARCHAR(20) NOT NULL,
+    address     TEXT        NOT NULL,
     FOREIGN KEY (customer_id) REFERENCES Customer (customer_id) ON DELETE CASCADE
 );
 
@@ -46,11 +45,11 @@ CREATE TABLE orders
 --OrderDetail (orderdetail_id,OrderID, ProductID, Quantity, unit_price)
 CREATE TABLE OrderDetail
 (
-	orderdetail_id SERIAL PRIMARY KEY, 
-    order_id   INT NOT NULL,
-    product_id INT NOT NULL,
-    quantity   INT NOT NULL,
-    unit_price INT NOT NULL,
+    orderdetail_id SERIAL PRIMARY KEY,
+    order_id       INT NOT NULL,
+    product_id     INT NOT NULL,
+    quantity       INT NOT NULL,
+    unit_price     INT NOT NULL,
     FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Product (product_id) ON DELETE CASCADE
 );
@@ -62,11 +61,21 @@ CREATE TABLE Cart
     customer_id INT NOT NULL,
     product_id  INT NOT NULL,
     quantity    INT NOT NULL,
-    update_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    update_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (customer_id) REFERENCES Customer (customer_id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES Product (product_id) ON DELETE CASCADE
 );
 
+--payment(payment_id, order_id, payment_method, status, update_at)
+CREATE TABLE payment
+(
+    payment_id     SERIAL PRIMARY KEY,
+    order_id       INT NOT NULL,
+    payment_method  VARCHAR(20), --card, cash
+    status  VARCHAR(20) DEFAULT 'Pending', --pending, paid, canceled
+    update_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE
+);
 
 --Product (ProductID, Category, Price, Quantity, Name)
 INSERT INTO Product (Category, Price, Quantity, Name)

@@ -35,8 +35,9 @@ public class OrderController {
         String name = payload.get("name").toString();
         String address = payload.get("address").toString();
         String phone = payload.get("phone").toString();
+        String paymentMethod = payload.get("paymentMethod").toString();
         log.info("Place Order Request");
-        String result = orderService.placeOrder(name, phone, address);
+        String result = orderService.placeOrder(name, phone, address, paymentMethod);
         return ResponseEntity.ok(result);
     }
 

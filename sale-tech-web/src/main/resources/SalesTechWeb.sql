@@ -86,9 +86,6 @@ VALUES ('Laptop', 20490000, 50, 'Laptop ASUS TUF Gaming F15 FX507ZC4-HN095W'),
        ('Keyboard', 1199000, 0, 'E-DRA-EK375-Alpha'),
        ('Keyboard', 490000, 30, 'AULA-F75');
 
-ALTER TABLE product
-    ADD COLUMN image VARCHAR(100);
-
 UPDATE product
 SET image = CASE
                 WHEN product_id = 1 THEN 'Lap1-ASUS-TUF-F15.png'

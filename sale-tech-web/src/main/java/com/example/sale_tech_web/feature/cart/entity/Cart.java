@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long cart_id;
+    private Long cartId;
 
     @Column(name = "customer_id", nullable = false)
-    private Long customer_id;
+    private Long customerId;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;

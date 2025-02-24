@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderdetail_id;
+    private Long orderdetailId;
 
     @Column(name = "order_id", nullable = false)
-    private Long order_id;
+    private Long orderId;
 
     @Column(name = "product_id", nullable = false)
-    private Long product_id;
+    private Long productId;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;

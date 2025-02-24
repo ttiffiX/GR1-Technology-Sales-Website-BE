@@ -37,7 +37,7 @@ public class CartService {
             CartDTO CartDTO = new CartDTO();
             CartDTO.setProductId(cart.getProductId());
             CartDTO.setCategory(product.getCategory());
-            CartDTO.setCartId(cart.getCart_id());
+            CartDTO.setCartId(cart.getCartId());
             CartDTO.setName(product.getName());
             CartDTO.setPrice(product.getPrice());
             CartDTO.setQuantity(cart.getQuantity());
@@ -65,7 +65,7 @@ public class CartService {
                 Cart cart = Cart.builder()
                         .productId(productId)
                         .quantity(quantity)
-                        .customer_id(1L)
+                        .customerId(1L)
                         .build();
                 cartRepository.save(cart);
                 return "Item added successfully!";

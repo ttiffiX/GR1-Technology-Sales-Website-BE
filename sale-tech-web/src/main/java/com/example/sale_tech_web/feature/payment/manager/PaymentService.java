@@ -17,14 +17,14 @@ public class PaymentService {
         Payment payment;
         if (Objects.equals(payment_method, "Card")) {
             payment = Payment.builder()
-                    .order_id(order_id)
-                    .payment_method(payment_method)
+                    .orderId(order_id)
+                    .paymentMethod(payment_method)
                     .status("paid")
                     .build();
         } else {
             payment = Payment.builder()
-                    .order_id(order_id)
-                    .payment_method(payment_method)
+                    .orderId(order_id)
+                    .paymentMethod(payment_method)
                     .status("pending")
                     .build();
         }
@@ -33,7 +33,7 @@ public class PaymentService {
 
     public void cancelPayment(Long order_id) {
 
-        List<Payment> payment = paymentRepository.findAll().stream().filter(p -> Objects.equals(p.getOrder_id(), order_id)).toList();
+        List<Payment> payment = paymentRepository.findAll().stream().filter(p -> Objects.equals(p.getOrderId(), order_id)).toList();
         payment.forEach(p -> p.setStatus("cancelled"));
     }
 }

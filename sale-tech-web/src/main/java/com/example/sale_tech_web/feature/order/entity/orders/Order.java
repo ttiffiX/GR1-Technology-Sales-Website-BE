@@ -20,11 +20,11 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long order_id;
+    private Long orderId;
 
     @JsonIgnore
     @Column(name = "customer_id")
-    private Long customer_id;
+    private Long customerId;
 
     @JsonIgnore
     @Column(name = "order_date")

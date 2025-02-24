@@ -23,10 +23,10 @@ public class Payment {
     private Long payment_id;
 
     @Column(name = "order_id", nullable = false)
-    private Long order_id;
+    private Long orderId;
 
     @Column(name = "payment_method", nullable = false)
-    private String payment_method;
+    private String paymentMethod;
 
     @Column(name = "status", nullable = false)
     private String status;

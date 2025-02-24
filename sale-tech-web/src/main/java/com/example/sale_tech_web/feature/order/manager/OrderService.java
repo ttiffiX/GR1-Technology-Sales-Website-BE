@@ -34,11 +34,11 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll(Sort.by(Sort.Order.desc("updateAt")));
         List<OrderDetail> orderDetails = orderDetailRepository.findAll();
         List<OrderDetailDTO> orderDetailDTOS = orderDetails.stream().map(item -> {
-            Product product = productService.getProductById(item.getProduct_id());
+            Product product = productService.getProductById(item.getProductId());
 
             OrderDetailDTO orderDetailDTO = new OrderDetailDTO();
-            orderDetailDTO.setOrderDetailId(item.getOrderdetail_id());
-            orderDetailDTO.setOrderId(item.getOrder_id());
+            orderDetailDTO.setOrderDetailId(item.getOrderdetailId());
+            orderDetailDTO.setOrderId(item.getOrderId());
             orderDetailDTO.setName(product.getName());
             orderDetailDTO.setPrice(product.getPrice());
             orderDetailDTO.setQuantity(item.getQuantity());
@@ -58,7 +58,7 @@ public class OrderService {
 
         // Tạo Order mới
         Order newOrder = Order.builder()
-                .customer_id(1L)
+                .customerId(1L)
                 .totalPrice(totalPrice)
                 .orderDate(LocalDateTime.now())
                 .status("pending")
@@ -73,8 +73,8 @@ public class OrderService {
         // Lưu từng sản phẩm trong giỏ hàng vào OrderDetail
         List<OrderDetail> orderDetails = cartResponse.getCartDTO().stream()
                 .map(cart -> OrderDetail.builder()
-                        .order_id(savedOrder.getOrder_id())
-                        .product_id(cart.getProductId())
+                        .orderId(savedOrder.getOrderId())
+                        .productId(cart.getProductId())
                         .quantity(cart.getQuantity())
                         .unitPrice(cart.getPrice())
                         .build()).collect(Collectors.toList());
@@ -82,7 +82,7 @@ public class OrderService {
         // Lưu danh sách OrderDetail
         orderDetailRepository.saveAll(orderDetails);
 
-        paymentService.setPayment(savedOrder.getOrder_id(), payment_method);
+        paymentService.setPayment(savedOrder.getOrderId(), payment_method);
 
         // Xóa tất cả các sản phẩm trong giỏ hàng
         cartService.removeAllFromCart();
@@ -94,7 +94,7 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ClientException("Order not found."));
         order.setStatus("canceled");
-        paymentService.cancelPayment(order.getOrder_id());
+        paymentService.cancelPayment(order.getOrderId());
         orderRepository.save(order);
         return "Canceled successfully!";
     }
